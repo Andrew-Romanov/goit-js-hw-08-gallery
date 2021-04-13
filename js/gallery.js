@@ -2,11 +2,21 @@ import galleryItems from "../gallery-items.js";
 
 const galleryElement = document.querySelector('.js-gallery');
 const modalElement = document.querySelector('.js-lightbox');
+const modalCloseButtonElement = document.querySelector('.lightbox__button[data-action="close-lightbox"]');
+const modalImageElement = document.querySelector('.lightbox__image');
 
 function galleryClickHandler (event) {
   if (event.target.nodeName !== 'IMG') return;
-  console.log(Number(event.target.dataset.value));
-}
+  modalImageElement.src = galleryItems[Number(event.target.dataset.value)].original;
+  modalImageElement.alt = galleryItems[Number(event.target.dataset.value)].description;
+  modalElement.classList.add('is-open');
+};
+
+function modalCloseButtonClickHandler (event) {
+  modalElement.classList.remove('is-open');
+  modalImageElement.alt = '';
+  modalImageElement.src = '';
+};
 
 // console.log(
 //   galleryItems.map((element) => {
@@ -22,6 +32,10 @@ galleryElement.insertAdjacentHTML('afterbegin', galleryElementMarkup);
 
 galleryElement.addEventListener('click', (event) => {
   galleryClickHandler(event);
+});
+
+modalCloseButtonElement.addEventListener('click', (event) => {
+  modalCloseButtonClickHandler(event);
 });
 
 // for (let i = 1; i <= 9; i++) {

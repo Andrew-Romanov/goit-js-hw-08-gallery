@@ -9,21 +9,46 @@ const modalImageElement = document.querySelector('.lightbox__image');
 function modalOpen(event) {
   event.preventDefault();
   if (event.target.nodeName !== 'IMG') return;
-  modalImageElement.src = galleryItems[Number(event.target.dataset.value)].original;
-  modalImageElement.alt = galleryItems[Number(event.target.dataset.value)].description;
+  setModalImage(Number(event.target.dataset.value));
   modalElement.classList.add('is-open');
-  window.addEventListener('keydown', modalCloseOnEscapeKey);
+  window.addEventListener('keydown', modalKeyHandler);
 };
 
 function modalClose() {
   modalElement.classList.remove('is-open');
   modalImageElement.alt = '';
   modalImageElement.src = '';
-  window.removeEventListener('keydown', modalCloseOnEscapeKey);
+  window.removeEventListener('keydown', modalKeyHandler);
 };
 
-function modalCloseOnEscapeKey(event) {
-  if (event.code === 'Escape') modalClose();
+function setModalImage(indexOfImage) {
+  modalImageElement.dataset.value = indexOfImage;
+  modalImageElement.src = galleryItems[indexOfImage].original;
+  modalImageElement.alt = galleryItems[indexOfImage].description;
+};
+
+function changeModalImage(count) {
+  if (Number(modalImageElement.dataset.value) + count === -1) {
+    setModalImage(galleryItems.length - 1);
+  } else if (Number(modalImageElement.dataset.value) + count === galleryItems.length) {
+    setModalImage(0);
+  } else {
+    setModalImage(Number(modalImageElement.dataset.value) + count);
+  };
+};
+
+function modalKeyHandler(event) {
+  switch (event.code) {
+    case 'Escape':
+      modalClose();
+      break;
+    case 'ArrowLeft':
+      changeModalImage(-1);
+      break;
+    case 'ArrowRight':
+      changeModalImage(+1);
+      break;
+  };
 };
 
 const galleryElementMarkup = galleryItems.map((element, index) => {

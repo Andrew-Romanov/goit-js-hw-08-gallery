@@ -16,24 +16,28 @@ function modalOpen(event) {
 
 function modalClose() {
   modalElement.classList.remove('is-open');
-  modalImageElement.alt = '';
-  modalImageElement.src = '';
+  setModalImageAttributes('', '');
   window.removeEventListener('keydown', modalKeyHandler);
 };
 
 function setModalImage(indexOfImage) {
   modalImageElement.dataset.value = indexOfImage;
-  modalImageElement.src = galleryItems[indexOfImage].original;
-  modalImageElement.alt = galleryItems[indexOfImage].description;
+  setModalImageAttributes(galleryItems[indexOfImage].original, galleryItems[indexOfImage].description)
+};
+
+function setModalImageAttributes(src, alt) {
+  modalImageElement.src = src;
+  modalImageElement.alt = alt;
 };
 
 function changeModalImage(count) {
-  if (Number(modalImageElement.dataset.value) + count === -1) {
+  const newIndex = Number(modalImageElement.dataset.value) + count;
+  if (newIndex === -1) {
     setModalImage(galleryItems.length - 1);
-  } else if (Number(modalImageElement.dataset.value) + count === galleryItems.length) {
+  } else if (newIndex === galleryItems.length) {
     setModalImage(0);
   } else {
-    setModalImage(Number(modalImageElement.dataset.value) + count);
+    setModalImage(newIndex);
   };
 };
 
